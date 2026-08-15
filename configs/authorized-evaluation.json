@@ -1,0 +1,29 @@
+{
+  "name": "authorized-evaluation",
+  "label": "authorized real-data evaluation — aggregate-only",
+  "data_kind": "authorized_external_csv",
+  "data_source": "authorized course CSV supplied outside this repository",
+  "seed": 42,
+  "n_splits": 5,
+  "threshold": 0.5,
+  "subsample": {
+    "enabled": true,
+    "method": "deterministic_stratified_by_group",
+    "max_rows": 160000
+  },
+  "models": {
+    "logistic_regression": {
+      "C": 1.0,
+      "max_iter": 250,
+      "solver": "liblinear",
+      "class_weight": "balanced"
+    },
+    "lightgbm": {
+      "n_estimators": 100,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 20
+    }
+  }
+}

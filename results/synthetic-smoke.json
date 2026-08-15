@@ -1,0 +1,72 @@
+{
+  "aggregate_only": true,
+  "data": {
+    "class_counts": {
+      "DELIVERY": 2560,
+      "PICKUP": 2560
+    },
+    "groups_evaluated": 80,
+    "kind": "synthetic",
+    "rows_evaluated": 5120,
+    "rows_read": 5120,
+    "source": "local fabricated generator",
+    "subsampling": {
+      "enabled": false,
+      "method": "none",
+      "requested_max_rows": null,
+      "selected_groups": 80,
+      "selected_rows": 5120,
+      "selection_seed": 42,
+      "truncated": false,
+      "whole_groups": true
+    }
+  },
+  "evaluation": {
+    "feature_policy": "coordinates and entity/row identifiers excluded",
+    "grouped_by": "courier_id",
+    "n_splits": 5,
+    "preprocessing": "fit separately inside each training fold",
+    "seed": 42,
+    "splitter": "StratifiedGroupKFold",
+    "threshold": 0.5
+  },
+  "label": "synthetic smoke — not a performance claim",
+  "models": {
+    "lightgbm": {
+      "folds": 5,
+      "metrics": {
+        "accuracy": {
+          "mean": 0.99941395,
+          "std": 0.000879
+        },
+        "auc": {
+          "mean": 0.99999849,
+          "std": 2.07e-06
+        },
+        "f1": {
+          "mean": 0.99941377,
+          "std": 0.00087909
+        }
+      }
+    },
+    "logistic_regression": {
+      "folds": 5,
+      "metrics": {
+        "accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "auc": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "f1": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      }
+    }
+  },
+  "row_level_predictions_written": false,
+  "schema_version": "1.0"
+}

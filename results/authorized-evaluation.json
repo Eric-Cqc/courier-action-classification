@@ -1,0 +1,72 @@
+{
+  "aggregate_only": true,
+  "data": {
+    "class_counts": {
+      "DELIVERY": 80000,
+      "PICKUP": 80000
+    },
+    "groups_evaluated": 306,
+    "kind": "authorized_external_csv",
+    "rows_evaluated": 160000,
+    "rows_read": 509604,
+    "source": "authorized course CSV supplied outside this repository",
+    "subsampling": {
+      "enabled": true,
+      "method": "deterministic_stratified_by_group",
+      "requested_max_rows": 160000,
+      "selected_groups": 306,
+      "selected_rows": 160000,
+      "selection_seed": 42,
+      "truncated": true,
+      "whole_groups": true
+    }
+  },
+  "evaluation": {
+    "feature_policy": "coordinates and entity/row identifiers excluded",
+    "grouped_by": "courier_id",
+    "n_splits": 5,
+    "preprocessing": "fit separately inside each training fold",
+    "seed": 42,
+    "splitter": "StratifiedGroupKFold",
+    "threshold": 0.5
+  },
+  "label": "authorized real-data evaluation — aggregate-only",
+  "models": {
+    "lightgbm": {
+      "folds": 5,
+      "metrics": {
+        "accuracy": {
+          "mean": 0.83144824,
+          "std": 0.00543277
+        },
+        "auc": {
+          "mean": 0.90765717,
+          "std": 0.00468793
+        },
+        "f1": {
+          "mean": 0.81475275,
+          "std": 0.00610246
+        }
+      }
+    },
+    "logistic_regression": {
+      "folds": 5,
+      "metrics": {
+        "accuracy": {
+          "mean": 0.74519626,
+          "std": 0.00610988
+        },
+        "auc": {
+          "mean": 0.82725334,
+          "std": 0.00576386
+        },
+        "f1": {
+          "mean": 0.74203603,
+          "std": 0.00747905
+        }
+      }
+    }
+  },
+  "row_level_predictions_written": false,
+  "schema_version": "1.0"
+}

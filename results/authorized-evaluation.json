@@ -21,6 +21,14 @@
       "whole_groups": true
     }
   },
+  "environment": {
+    "package_versions": {
+      "lightgbm": "4.7.0",
+      "numpy": "2.5.2",
+      "pandas": "3.0.5",
+      "sklearn": "1.9.0"
+    }
+  },
   "evaluation": {
     "feature_policy": "coordinates and entity/row identifiers excluded",
     "grouped_by": "courier_id",
@@ -67,6 +75,7 @@
       }
     }
   },
+  "positive_label": "PICKUP",
   "row_level_predictions_written": false,
   "schema_version": "1.0"
 }

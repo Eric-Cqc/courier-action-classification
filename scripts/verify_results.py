@@ -28,6 +28,11 @@ def verify(expected_path: Path, actual_path: Path) -> None:
             raise ValueError("result is not marked aggregate_only")
         if artifact.get("row_level_predictions_written") is not False:
             raise ValueError("result claims to contain row-level predictions")
+        if artifact.get("positive_label") != "PICKUP":
+            raise ValueError("result positive_label must be PICKUP")
+
+    if expected.get("positive_label") != actual.get("positive_label"):
+        raise ValueError("result positive_label metadata differs")
 
     for key in ("label", "evaluation"):
         if expected.get(key) != actual.get(key):

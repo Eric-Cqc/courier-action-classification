@@ -70,6 +70,7 @@ def test_evaluation_result_is_aggregate_only() -> None:
     protocol = {
         "name": "test",
         "label": "synthetic smoke — not a performance claim",
+        "positive_label": "PICKUP",
         "data_kind": "synthetic",
         "seed": 42,
         "n_splits": 3,
@@ -83,6 +84,13 @@ def test_evaluation_result_is_aggregate_only() -> None:
     result = evaluate_dataframe(frame, protocol)
     assert result["aggregate_only"] is True
     assert result["row_level_predictions_written"] is False
+    assert result["positive_label"] == "PICKUP"
+    assert set(result["environment"]["package_versions"]) == {
+        "numpy",
+        "pandas",
+        "sklearn",
+        "lightgbm",
+    }
     assert set(result["models"]) == {"logistic_regression", "lightgbm"}
     assert all("metrics" in model for model in result["models"].values())
     assert "predictions" not in result

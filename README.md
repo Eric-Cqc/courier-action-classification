@@ -15,11 +15,13 @@ No leaderboard placement or rank is claimed.
 
 ## Quick start
 
-The package is designed for the supplied offline virtual environment:
+From a clean clone, create an environment and install the package with its
+development test dependency:
 
 ```bash
+python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install -e . --no-deps --no-build-isolation
+python -m pip install -e ".[dev]"
 python -m pytest -q
 ```
 
@@ -33,6 +35,18 @@ courier-action evaluate \
   --output-dir /tmp/ca-smoke
 ```
 
+Regenerate and compare the committed synthetic smoke artifact in one shell
+command:
+
+```bash
+courier-action make-synthetic --output-dir /tmp/ca-synth --seed 42 && \
+courier-action evaluate --train-csv /tmp/ca-synth/train.csv \
+  --protocol configs/smoke.json --output-dir /tmp/ca-smoke && \
+python scripts/verify_results.py \
+  --expected results/synthetic-smoke.json \
+  --actual /tmp/ca-smoke/results.json
+```
+
 The synthetic output is deliberately artificial: identifiers begin with
 `SYNTH_`, dates are future placeholders, and the feature relationships are
 hand-built for software testing. It does not reflect real distributions and
@@ -44,6 +58,8 @@ The headline protocol is deterministic grouped cross-validation:
 
 - The grouping key is `courier_id`; `StratifiedGroupKFold` is used when the
   installed scikit-learn provides it, with a `GroupKFold` compatibility path.
+- The fixed positive class is declared as `positive_label: PICKUP`; the target
+  encoding uses `PICKUP` as one and `DELIVERY` as zero.
 - All imputers, scaling, and one-hot encoding are fitted inside each training
   fold. Validation rows are transformed only after that fit; training and
   validation data are never concatenated for preprocessing.
@@ -68,8 +84,10 @@ Its workflow used a random stratified split for intermediate checks, fitted
 some transformations before validation, combined train and test frames for
 feature work, and used non-grouped cross-validation for the final classifier.
 It also searched thresholds on the same out-of-fold probabilities that were
-then reported. The legacy CV F1 was inflated by leaky evaluation; this
-repository does not republish the legacy number.
+then reported. The legacy estimate was optimistically biased and not directly
+comparable because it used a different positive class, features, sampling,
+folds, and model configuration, plus preprocessing performed outside folds.
+This repository does not republish legacy numbers.
 
 This reconstruction keeps the target task and model comparison while making
 the leakage controls explicit: courier-disjoint folds, fold-local

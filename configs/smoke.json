@@ -1,6 +1,7 @@
 {
   "name": "synthetic-smoke",
   "label": "synthetic smoke — not a performance claim",
+  "positive_label": "PICKUP",
   "data_kind": "synthetic",
   "data_source": "local fabricated generator",
   "seed": 42,

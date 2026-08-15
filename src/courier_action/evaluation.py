@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from importlib.metadata import PackageNotFoundError, version as package_version
 from pathlib import Path
 from typing import Any
 
@@ -35,6 +36,24 @@ except ImportError:  # pragma: no cover - exercised only with older scikit-learn
 
 
 MODEL_NAMES = ("logistic_regression", "lightgbm")
+
+
+def _package_versions() -> dict[str, str]:
+    """Return the package versions that affect the recorded evaluation."""
+
+    distributions = {
+        "numpy": "numpy",
+        "pandas": "pandas",
+        "sklearn": "scikit-learn",
+        "lightgbm": "lightgbm",
+    }
+    versions: dict[str, str] = {}
+    for name, distribution in distributions.items():
+        try:
+            versions[name] = package_version(distribution)
+        except PackageNotFoundError:  # pragma: no cover - defensive metadata path
+            versions[name] = "unavailable"
+    return versions
 
 
 def _stable_group_key(value: object, seed: int) -> str:
@@ -248,6 +267,8 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
     threshold = float(protocol["threshold"])
     if not 0.0 <= threshold <= 1.0:
         raise ValueError("protocol threshold must be between 0 and 1")
+    if str(protocol.get("positive_label", "PICKUP")) != "PICKUP":
+        raise ValueError("positive_label must be PICKUP")
     if int(protocol["n_splits"]) < 2:
         raise ValueError("protocol n_splits must be at least 2")
     subsample = protocol["subsample"]
@@ -317,8 +338,10 @@ def evaluate_dataframe(df: pd.DataFrame, protocol: dict[str, Any]) -> dict[str, 
     return {
         "schema_version": "1.0",
         "label": str(protocol.get("label", protocol["name"])),
+        "positive_label": str(protocol.get("positive_label", "PICKUP")),
         "aggregate_only": True,
         "row_level_predictions_written": False,
+        "environment": {"package_versions": _package_versions()},
         "data": {
             "kind": str(protocol.get("data_kind", "external_csv")),
             "source": str(protocol.get("data_source", "caller-provided CSV")),

@@ -1,6 +1,7 @@
 {
   "name": "authorized-evaluation",
   "label": "authorized real-data evaluation — aggregate-only",
+  "positive_label": "PICKUP",
   "data_kind": "authorized_external_csv",
   "data_source": "authorized course CSV supplied outside this repository",
   "seed": 42,

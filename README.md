@@ -1,4 +1,6 @@
 # Courier action classification
+This repo is a course study. Not a product install path — see profile Selected for current work.
+
 
 This repository is a code-only, leakage-audited reconstruction of a binary
 classification workflow. The target is `action_type`: `PICKUP` versus
